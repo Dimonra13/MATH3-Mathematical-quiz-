@@ -13,8 +13,6 @@ import javax.sound.sampled.UnsupportedAudioFileException;
  *
  */
 public class Musica {
-	private Clip sonido = null;
-
 	/**
 	 * Metodo que carga y reproduce el archivo de fallo de pregunta
 	 * @throws LineUnavailableException Archivo corrupto
@@ -41,29 +39,19 @@ public class Musica {
 		son.open(ai);
 		son.start();
 	}
+	
 	/**
 	 *  Metodo que carga y reproduce el archivo de GameOver del Juego
 	 * @throws LineUnavailableException Archivo corrupto
 	 * @throws IOException Musica no Encontrada
 	 * @throws UnsupportedAudioFileException Archivo incomplatible
 	 */
+	/*
 	public void Gameover() throws LineUnavailableException, IOException, UnsupportedAudioFileException{
 		BufferedInputStream bi = new BufferedInputStream(getClass().getResourceAsStream("/Resource/GameOver.wav"));
 		AudioInputStream ai = AudioSystem.getAudioInputStream(bi);
 		Clip son = AudioSystem.getClip();
 		son.open(ai);
 		son.start();
-	}
-	/**
-	 * Metodo que para la reproduccion de la musica
-	 */
-	public void parar () {
-		this.sonido.stop();
-	}
-	/**
-	 * Metodo que inicia la reproduccion de la musica
-	 */
-	public void musica() {
-		this.sonido.start();
-	}
+	}*/
 }

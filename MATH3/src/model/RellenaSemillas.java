@@ -154,20 +154,24 @@ public class RellenaSemillas {
         }
         
     for(int i=2000;i<3000;i++){
-          int o1=(int) (Math.random()*100);
-          int o2=(int) (Math.random()*100);
-          if(o2==0){
-              o2=54;
-          }
+          int o1=(int) (Math.random()*10000);
           int op=(int) (Math.random()*10);
           int resultado=0;
           if(op>4){
+        	  int o2=(int) (Math.random()*10000);
+        	  if(o2==0){
+                  o2=5400;
+              }
               String pregunta= o1+" * "+o2+" =";
               Preguntas.add(i, pregunta);
               resultado=o1*o2;
               RespuestaBuena.add(i,resultado);
               
           }else{
+        	  int o2=(int) (Math.random()*100);
+        	  if(o2==0){
+                  o2=54;
+              }
               String pregunta= o1+" / "+o2+" =";
               Preguntas.add(i, pregunta);
               resultado=o1/o2;
@@ -192,19 +196,23 @@ public class RellenaSemillas {
             
     for(int i=2000;i<3000;i++){
           int o1=(int) (Math.random()*100);
-          int o2=(int) (Math.random()*100);
-          if(o2==0){
-              o2=54;
-          }
+          
           int op=(int) (Math.random()*10);
           int resultado=0;
           if(op>4){
+        	  int o2=(int) (Math.random()*10000);
+              if(o2==0){
+                  o2=5400;
+              }
               String pregunta= o1+" * "+o2+" =";
               PreguntasENT.add(i, pregunta);
               resultado=o1*o2;
               RespuestaBuenaENT.add(i,resultado);
-              
           }else{
+        	  int o2=(int) (Math.random()*100);
+              if(o2==0){
+                  o2=54;
+              }
               String pregunta= o1+" / "+o2+" =";
               PreguntasENT.add(i, pregunta);
               resultado=o1/o2;

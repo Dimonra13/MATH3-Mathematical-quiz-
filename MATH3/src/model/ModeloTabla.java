@@ -21,7 +21,7 @@ public class ModeloTabla {
 	 */
 	public DefaultTableModel getTablaModel(ListaDeJugadores list)
 	 {
-		String[] nombres = {"","Posicion", "Nickname","Puntacion"};
+		String[] nombres = {"","Posición", "Apodo","Puntación"};
 		DefaultTableModel modelo = new DefaultTableModel(nombres, 0) {
 			private static final long serialVersionUID = 1L;
 
