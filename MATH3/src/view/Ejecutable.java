@@ -47,6 +47,7 @@ import java.awt.Toolkit;
 public class Ejecutable extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private static final int NUMERO_PREGUNTAS = 20;
+
 	private static final int CFACIL = 3;
 	private static final int CMEDIO = 10;
 	protected static String name;
@@ -56,7 +57,7 @@ public class Ejecutable extends JFrame {
 	private JPanel Inicio;
 	private JPanel Ranking;
 	private JPanel ajustes;
-	
+	private static final ImageIcon ICONOAPP = new ImageIcon(Toolkit.getDefaultToolkit().getImage(Ejecutable.class.getResource("/Resource/i.png")));
 	private JButton btnSonido;
 	private JButton btnInicioDePartida;
 	private JButton btnEntrenamiento;
@@ -151,6 +152,7 @@ public class Ejecutable extends JFrame {
 		}else {
 			JOptionPane.showMessageDialog(null, "Hola, Bienvenido de nuevo "+name, "SALUDOS",JOptionPane.DEFAULT_OPTION);
 		}
+		setIconImage(ICONOAPP.getImage());
 		rs.generar();
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
