@@ -30,7 +30,6 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.awt.event.ActionEvent;
 
-import javax.swing.AbstractButton;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.JLabel;
@@ -41,13 +40,15 @@ import javax.swing.JTable;
 
 import java.awt.Font;
 import java.awt.Toolkit;
+import javax.swing.JTextField;
+import java.awt.SystemColor;
 /**
  * Clase que lanza la Aplicacion.
  */
 public class Ejecutable extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private static final int NUMERO_PREGUNTAS = 20;
-
+	private static final ImageIcon ICONOAPP = new ImageIcon(Toolkit.getDefaultToolkit().getImage(Ejecutable.class.getResource("/Resource/i.png")));
 	private static final int CFACIL = 3;
 	private static final int CMEDIO = 10;
 	protected static String name;
@@ -57,7 +58,7 @@ public class Ejecutable extends JFrame {
 	private JPanel Inicio;
 	private JPanel Ranking;
 	private JPanel ajustes;
-	private static final ImageIcon ICONOAPP = new ImageIcon(Toolkit.getDefaultToolkit().getImage(Ejecutable.class.getResource("/Resource/i.png")));
+	
 	private JButton btnSonido;
 	private JButton btnInicioDePartida;
 	private JButton btnEntrenamiento;
@@ -66,9 +67,9 @@ public class Ejecutable extends JFrame {
 	private JButton btnFondo;
 	private JButton btnAjustes;
 	private JButton btnSalir;
+	private JButton btnTutorial;
 	private JButton btnAceptar;
 	private JLabel lblpuntuacion;
-	private JLabel lblPuntuacionMax;
 	private JLabel lblPuntuacionM;
 	private JLabel lblRecord;
 	private JLabel lblFlecha;
@@ -80,13 +81,14 @@ public class Ejecutable extends JFrame {
 	protected JTable table;
 	protected JPanel GameOver;
 	protected ListaDeJugadores list = new ListaDeJugadores();
-	protected Musica mtc = new Musica();
+	protected Musica mus = new Musica();
 	protected int puntuacionNueva = 0;
 	protected Color colorPreGameOver;
 	protected static boolean tiempo = false;
 	private JLabel lblTu;
-	private JLabel lblMejorPuntuacion;
 	private JLabel lblCorona;
+	private JTextField txtClasificacin;
+	
 	
 	/**
 	 * Lanza la aplicacion.
@@ -104,14 +106,14 @@ public class Ejecutable extends JFrame {
 						bdo.cargarListaJugadores();
 						String nickname = JOptionPane.showInputDialog(null,"Nombre: ","Inicio",JOptionPane.QUESTION_MESSAGE);
 						if(nickname==null) {
-							int op = JOptionPane.showConfirmDialog(null,"¿Estas seguro?",null,JOptionPane.YES_NO_OPTION);
+							int op = JOptionPane.showConfirmDialog(null,"¿Estás seguro?",null,JOptionPane.YES_NO_OPTION);
 							if(op==0) {
-								JOptionPane.showMessageDialog(null, "Adios, Hasta pronto",null , JOptionPane.INFORMATION_MESSAGE);
+								JOptionPane.showMessageDialog(null, "Adiós, hasta pronto",null , JOptionPane.INFORMATION_MESSAGE);
 								System.exit(0);
 							}
 						}else if (nickname.isEmpty())
 						{
-							JOptionPane.showMessageDialog(null, "No a introducido un usuario","Error!", JOptionPane.ERROR_MESSAGE);
+							JOptionPane.showMessageDialog(null, "No ha introducido un usuario","¡Error!", JOptionPane.ERROR_MESSAGE);
 						}else {
 							retorno=true;
 							name = nickname;
@@ -121,15 +123,15 @@ public class Ejecutable extends JFrame {
 					} catch (ClassNotFoundException e) {
 						System.exit(0);
 					} catch (IOException e) {
-						int opcion = JOptionPane.showConfirmDialog(null, "Lista no encotrada, ¿Desea crear una nueva?","Error!", JOptionPane.YES_NO_OPTION);
+						int opcion = JOptionPane.showConfirmDialog(null, "Lista no encotrada, ¿Desea crear una nueva?","¡Error!", JOptionPane.YES_NO_OPTION);
 						if(opcion==0) {
 							try {
 								bdo.crearListaJugadores();
 							} catch (IOException e1) {
-								JOptionPane.showMessageDialog(null, "Error!");
+								JOptionPane.showMessageDialog(null, "¡Error!");
 							}
 						}else {
-							JOptionPane.showMessageDialog(null, "Adios, Hasta pronto",null,JOptionPane.INFORMATION_MESSAGE);
+							JOptionPane.showMessageDialog(null, "Adiós, hasta pronto",null,JOptionPane.INFORMATION_MESSAGE);
 							System.exit(0);
 						}
 					}
@@ -150,7 +152,7 @@ public class Ejecutable extends JFrame {
 		if(list.existeJugador(name)==false) {
 			list.AgregarJugador(name, 0);
 		}else {
-			JOptionPane.showMessageDialog(null, "Hola, Bienvenido de nuevo "+name, "SALUDOS",JOptionPane.DEFAULT_OPTION);
+			JOptionPane.showMessageDialog(null, "Hola, bienvenido de nuevo "+name, " ",JOptionPane.DEFAULT_OPTION);
 		}
 		setIconImage(ICONOAPP.getImage());
 		rs.generar();
@@ -200,19 +202,28 @@ public class Ejecutable extends JFrame {
 		table.setSurrendersFocusOnKeystroke(true);
 		table.setFillsViewportHeight(true);
 		table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
-		table.setModel(new DefaultTableModel(new Object[][] {}, new String[] { "Posicion", "Nickname","Puntacion"}));
+		table.setModel(new DefaultTableModel(new Object[][] {}, new String[] { "Posición", "Nickname","Puntación"}));
 		table.getColumnModel().getColumn(0).setPreferredWidth(113);
 		table.getColumnModel().getColumn(1).setPreferredWidth(131);
 		table.getColumnModel().getColumn(2).setPreferredWidth(131);
 
 		scrollPane.setViewportView(table);
+		
+		txtClasificacin = new JTextField();
+		txtClasificacin.setBackground(SystemColor.controlHighlight);
+		txtClasificacin.setHorizontalAlignment(SwingConstants.CENTER);
+		txtClasificacin.setFont(new Font("Dubai Medium", Font.PLAIN, 60));
+		txtClasificacin.setText("Clasificaci\u00F3n");
+		txtClasificacin.setBounds(82, 0, 507, 70);
+		Ranking.add(txtClasificacin);
+		txtClasificacin.setColumns(10);
 		btnVolverking.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				cambiara(Inicio);
 			}
 		});
 		
-		btnInicioDePartida = new JButton("Clasico");
+		btnInicioDePartida = new JButton("Clásico");
 		btnInicioDePartida.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				Juego(0);
@@ -240,12 +251,10 @@ public class Ejecutable extends JFrame {
 				if (indicadorSound == true)
 				{
 					btnSonido.setIcon(niconoSound);
-					mtc.parar();
 					btnSonido.repaint();
 					indicadorSound = false;
 				}else {
 					btnSonido.setIcon(iconoSound);
-					mtc.musica();
 					btnSonido.repaint();
 					indicadorSound = true;
 				} 
@@ -294,7 +303,7 @@ public class Ejecutable extends JFrame {
 		btnEntrenamiento.setBounds(90, 382, 390, 70);
 		Inicio.add(btnEntrenamiento);
 		
-		btnRanking = new JButton("Ranking");
+		btnRanking = new JButton("Clasificación");
 		btnRanking.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				cambiara(Ranking);				
@@ -313,14 +322,33 @@ public class Ejecutable extends JFrame {
 		btnSalir.setBorder(null);
 		btnSalir.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				int op = JOptionPane.showConfirmDialog(null,"¿Estas seguro?",null,JOptionPane.YES_NO_OPTION);
+				int op = JOptionPane.showConfirmDialog(null,"¿Estás seguro?",null,JOptionPane.YES_NO_OPTION);
 				if(op==0) {
-					JOptionPane.showMessageDialog(null, "Adios, Hasta pronto",null , JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.showMessageDialog(null, "Adiós, hasta pronto",null , JOptionPane.INFORMATION_MESSAGE);
 					System.exit(0);
 				}
 			}
 		});
 		Inicio.add(btnSalir);
+		
+		btnTutorial = new JButton("");
+		btnTutorial.setBounds(519, 526, 70, 70);
+		btnTutorial.setIcon(iconoescape);
+		btnTutorial.repaint();
+		btnTutorial.setBorder(null);
+		btnTutorial.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+					JOptionPane.showMessageDialog(null, "Guía de juego:\r\n" + 
+							"\r\n" + 
+							"Math3 es un juego quiz sobre matemáticas donde el jugador deberá elegir la respuesta correcta a la pregunta formulada. Consta de dos modos de juego:\r\n" + 
+							"\r\n" + 
+							"       -El modo Clásico consiste en 20 preguntas, con 15 segundos para responder a cada una de ellas.\r\n" + 
+							"\r\n" + 
+							"       -En el modo entrenamiento no habrá límite de tiempo ni un número de preguntas fijo, ¡juega hasta que te canses! Ideal para prepararte para el modo Clásico.\r\n" + 
+							"",null , JOptionPane.INFORMATION_MESSAGE);
+			}
+		});
+		Inicio.add(btnTutorial);
 		
 		JButton logo = new JButton("");
 		logo.setBounds(90, 68, 390, 194);
@@ -346,14 +374,14 @@ public class Ejecutable extends JFrame {
 		lblGameOver.setBounds(0, 0, 589, 111);
 		GameOver.add(lblGameOver);
 		
-		JLabel lblTuPuntuacion = new JLabel("Tu Puntuacion:");
+		JLabel lblTuPuntuacion = new JLabel("Tu puntuación:");
 		lblTuPuntuacion.setHorizontalAlignment(SwingConstants.LEFT);
 		lblTuPuntuacion.setFont(new Font("Tahoma", Font.PLAIN, 21));
 		lblTuPuntuacion.setForeground(Color.WHITE);
 		lblTuPuntuacion.setBounds(25, 198, 147, 46);
 		GameOver.add(lblTuPuntuacion);
 		
-		JLabel lblPuntuacionMax = new JLabel("Record:");
+		JLabel lblPuntuacionMax = new JLabel("Récord:");
 		lblPuntuacionMax.setHorizontalAlignment(SwingConstants.LEFT);
 		lblPuntuacionMax.setFont(new Font("Tahoma", Font.PLAIN, 21));
 		lblPuntuacionMax.setForeground(Color.WHITE);
@@ -394,25 +422,25 @@ public class Ejecutable extends JFrame {
 		
 		GameOver.add(btnBarra);
 		
-		JLabel lblFacil = new JLabel("Nivel Bajo");
+		JLabel lblFacil = new JLabel("Nivel bajo");
 		lblFacil.setFont(new Font("Tahoma", Font.PLAIN, 35));
 		lblFacil.setForeground(Color.WHITE);
 		lblFacil.setBounds(12, 476, 203, 44);
 		GameOver.add(lblFacil);
 		
-		JLabel lblNivelMedio = new JLabel("Nivel Medio");
+		JLabel lblNivelMedio = new JLabel("Nivel medio");
 		lblNivelMedio.setForeground(Color.WHITE);
 		lblNivelMedio.setFont(new Font("Tahoma", Font.PLAIN, 35));
 		lblNivelMedio.setBounds(206, 476, 191, 44);
 		GameOver.add(lblNivelMedio);
 		
-		JLabel lblNivelDifcil = new JLabel("Nivel Alto");
+		JLabel lblNivelDifcil = new JLabel("Nivel alto");
 		lblNivelDifcil.setForeground(Color.WHITE);
 		lblNivelDifcil.setFont(new Font("Tahoma", Font.PLAIN, 35));
 		lblNivelDifcil.setBounds(430, 476, 147, 44);
 		GameOver.add(lblNivelDifcil);
 		
-		lblRecord = new JLabel("Mejor Puntuaci\u00F3n!!!");
+		lblRecord = new JLabel("\u00A1Mejor puntuaci\u00F3n!");
 		lblRecord.setFont(new Font("Tahoma", Font.PLAIN, 35));
 		lblRecord.setHorizontalAlignment(SwingConstants.CENTER);
 		lblRecord.setForeground(Color.WHITE);
@@ -474,6 +502,7 @@ public class Ejecutable extends JFrame {
 		btnVolverking.setBackground(color);
 		btnAjustes.setBackground(color);
 		btnSalir.setBackground(color);
+		btnTutorial.setBackground(color);
 		btnAceptar.setBackground(btones);
 		contentPane.setBackground(color);
 		cambiador.setBackground(color);
@@ -490,8 +519,8 @@ public class Ejecutable extends JFrame {
 	 * Metodo que permite cambiar el color de los fondos de la aplicacion
 	 */
 	private void cambiarColor() {
-		String[] colores = {"BLANCO","AMARILLO","ROSA","NEGRO"};
-		String color = (String) JOptionPane.showInputDialog(null, "Seleccione Color", "Colores", JOptionPane.DEFAULT_OPTION,null, colores, colores[2]);
+		String[] colores = {"BLANCO","AMARILLO","ROSA"};
+		String color = (String) JOptionPane.showInputDialog(null, "Seleccione color", "Colores", JOptionPane.DEFAULT_OPTION,null, colores, colores[2]);
 		if(color == null){
 			/*NADA*/
 		}else if(color.toUpperCase()== "BLANCO") {
@@ -502,6 +531,7 @@ public class Ejecutable extends JFrame {
 			btnVolverking.setBackground(Color.WHITE);
 			btnAjustes.setBackground(Color.WHITE);
 			btnSalir.setBackground(Color.WHITE);
+			btnTutorial.setBackground(Color.WHITE);
 			contentPane.setBackground(Color.WHITE);
 			cambiador.setBackground(Color.WHITE);
 			Inicio.setBackground(Color.WHITE);
@@ -517,6 +547,7 @@ public class Ejecutable extends JFrame {
 			btnVolverking.setBackground(ama);
 			btnAjustes.setBackground(ama);
 			btnSalir.setBackground(ama);
+			btnTutorial.setBackground(ama);
 			contentPane.setBackground(ama);
 			cambiador.setBackground(ama);
 			Inicio.setBackground(ama);
@@ -532,23 +563,7 @@ public class Ejecutable extends JFrame {
 			btnVolverking.setBackground(ama);
 			btnAjustes.setBackground(ama);
 			btnSalir.setBackground(ama);
-			contentPane.setBackground(ama);
-			cambiador.setBackground(ama);
-			Inicio.setBackground(ama);
-			Ranking.setBackground(ama);
-			ajustes.setBackground(ama);
-			colorPreGameOver = ama;
-		}else if(color.toUpperCase()== "NEGRO") {
-			Color ama = Color.BLACK;
-			UIManager.put("OptionPane.background",Color.BLACK);
-			UIManager.put("Panel.background",Color.BLACK);
-			UIManager.put("OptionPane.foreground",Color.RED);
-			UIManager.put("Button.background",Color.RED);
-			UIManager.put("Button.foreground",Color.BLACK);
-			btnvolverInicio.setBackground(ama);
-			btnVolverking.setBackground(ama);
-			btnAjustes.setBackground(ama);
-			btnSalir.setBackground(ama);
+			btnTutorial.setBackground(ama);
 			contentPane.setBackground(ama);
 			cambiador.setBackground(ama);
 			Inicio.setBackground(ama);
@@ -589,12 +604,12 @@ public class Ejecutable extends JFrame {
 					npregunta = 0+(int)(Math.random() * 999);
 					naleatorip = 0+(int)(Math.random() * 2);
 					option = opcionesJuego(naleatorip, npregunta);
-					seleccion = JOptionPane.showOptionDialog(null, ""+rs.getPreguntas().get(npregunta), "Nivel Facil Pregunta "+(pregunta+1), JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, option, option[0]);
+					seleccion = JOptionPane.showOptionDialog(null, ""+rs.getPreguntas().get(npregunta), "Nivel fácil pregunta "+(pregunta+1), JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, option, option[0]);
 					if(tiempo == false) {
 						if(seleccion==naleatorip) {
 							try {
 								if (indicadorSound) {
-									mtc.Success();
+									mus.Success();
 								}
 								temp.reiniciar();
 								temp.setVisible(false);
@@ -613,7 +628,7 @@ public class Ejecutable extends JFrame {
 							}
 							try {
 								if (indicadorSound) {
-									mtc.Fail();
+									mus.Fail();
 								}
 								temp.reiniciar();
 								temp.setVisible(false);
@@ -623,11 +638,11 @@ public class Ejecutable extends JFrame {
 									puntuacionNivel=0;
 								}
 							} catch (LineUnavailableException | IOException | UnsupportedAudioFileException e) {
-								JOptionPane.showMessageDialog(null, "Musica no encontrada");
+								JOptionPane.showMessageDialog(null, "Música no encontrada");
 							}						
 						}
 					}else {
-						JOptionPane.showMessageDialog(null,"Incorrecto, Esta pregunta contara como fallida");
+						JOptionPane.showMessageDialog(null,"Incorrecto, esta pregunta contará como fallida");
 						puntuacionNivel-=3;
 						if(puntuacionNivel<0){
 							puntuacionNivel=0;
@@ -637,19 +652,19 @@ public class Ejecutable extends JFrame {
 					npregunta = 1000 + (int)(Math.random() * 999);
 					naleatorip = 0+(int)(Math.random() * 2);
 					option = opcionesJuego(naleatorip, npregunta);
-					seleccion = JOptionPane.showOptionDialog(null, ""+rs.getPreguntas().get(npregunta), "Nivel Medio Pregunta "+(pregunta+1), JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, option, option[0]);
+					seleccion = JOptionPane.showOptionDialog(null, ""+rs.getPreguntas().get(npregunta), "Nivel medio pregunta "+(pregunta+1), JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, option, option[0]);
 					if(tiempo == false) {
 						if(seleccion==naleatorip) {
 							try {
 								if (indicadorSound) {
-									mtc.Success();
+									mus.Success();
 								}
 								temp.reiniciar();
 								temp.setVisible(false);
 								JOptionPane.showMessageDialog(null,"Correcto");
 								puntuacionNivel+=2;
 							} catch (LineUnavailableException | IOException | UnsupportedAudioFileException e) {
-								JOptionPane.showMessageDialog(null, "Musica no encontrada");
+								JOptionPane.showMessageDialog(null, "Música no encontrada");
 							}
 						}
 						else{
@@ -661,7 +676,7 @@ public class Ejecutable extends JFrame {
 							}
 							try {
 								if (indicadorSound) {
-									mtc.Fail();
+									mus.Fail();
 								}
 								temp.reiniciar();
 								temp.setVisible(false);
@@ -671,11 +686,11 @@ public class Ejecutable extends JFrame {
 									puntuacionNivel=0;
 								}
 							} catch (LineUnavailableException | IOException | UnsupportedAudioFileException e) {
-								JOptionPane.showMessageDialog(null, "Musica no encontrada");
+								JOptionPane.showMessageDialog(null, "Música no encontrada");
 							}						
 						}
 					}else {
-						JOptionPane.showMessageDialog(null,"Incorrecto, Esta pregunta contara como fallida");
+						JOptionPane.showMessageDialog(null,"Incorrecto, esta pregunta contará como fallida");
 						puntuacionNivel-=2;
 						if(puntuacionNivel<0){
 							puntuacionNivel=0;
@@ -685,19 +700,19 @@ public class Ejecutable extends JFrame {
 					npregunta = 2000 + (int)(Math.random() * 1000);
 					naleatorip = 0+(int)(Math.random() * 2);
 					option = opcionesJuego(naleatorip, npregunta);
-					seleccion = JOptionPane.showOptionDialog(null, ""+rs.getPreguntas().get(npregunta), "Nivel Dificil Pregunta "+(pregunta+1), JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, option, option[0]);
+					seleccion = JOptionPane.showOptionDialog(null, ""+rs.getPreguntas().get(npregunta), "Nivel difícil pregunta "+(pregunta+1), JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, option, option[0]);
 					if(tiempo == false) {
 						if(seleccion==naleatorip) {
 							try {
 								if (indicadorSound) {
-									mtc.Success();
+									mus.Success();
 								}
 								temp.reiniciar();
 								temp.setVisible(false);
 								JOptionPane.showMessageDialog(null,"Correcto");
 								puntuacionNivel+=3;
 							} catch (LineUnavailableException | IOException | UnsupportedAudioFileException e) {
-								JOptionPane.showMessageDialog(null, "Musica no encontrada");
+								JOptionPane.showMessageDialog(null, "Música no encontrada");
 							}
 						}
 						else{
@@ -709,7 +724,7 @@ public class Ejecutable extends JFrame {
 							}
 							try {
 								if (indicadorSound) {
-									mtc.Fail();
+									mus.Fail();
 								}
 								temp.reiniciar();
 								temp.setVisible(false);
@@ -719,11 +734,11 @@ public class Ejecutable extends JFrame {
 									puntuacionNivel=0;
 								}
 							} catch (LineUnavailableException | IOException | UnsupportedAudioFileException e) {
-								JOptionPane.showMessageDialog(null, "Musica no encontrada");
+								JOptionPane.showMessageDialog(null, "Música no encontrada");
 							}						
 						}
 					}else {
-						JOptionPane.showMessageDialog(null,"Incorrecto, Esta pregunta contara como fallida");
+						JOptionPane.showMessageDialog(null,"Incorrecto, esta pregunta contará como fallida");
 						puntuacionNivel--;
 						if(puntuacionNivel<0){
 							puntuacionNivel=0;
@@ -737,11 +752,11 @@ public class Ejecutable extends JFrame {
 				cambiara(Inicio);
 			}else {
 				formulaDePuntuacion(puntuacionNivel);
-				try {
-					mtc.Gameover();
+				/*try {
+					mus.Gameover();
 				} catch (LineUnavailableException | IOException | UnsupportedAudioFileException e) {
 					JOptionPane.showMessageDialog(null, "Sonido no encontrado");
-				}
+				}*/
 				fondoGameOver(Color.BLACK);
 				cambiara(GameOver);
 			}
@@ -750,8 +765,8 @@ public class Ejecutable extends JFrame {
 			temp.setVisible(false);
 			this.setVisible(false);
 			int pregunta = 0;
-			String[] niveles = {"Facil","Medio","Dificil"};
-			String nivelSelected = (String) JOptionPane.showInputDialog(null, "Seleccione nivel a practicar", "Dificultad", JOptionPane.DEFAULT_OPTION,null, niveles, niveles[0]);
+			String[] niveles = {"Fácil","Medio","Difícil"};
+			String nivelSelected = (String) JOptionPane.showInputDialog(null, "Seleccione el nivel a practicar", "Dificultad", JOptionPane.DEFAULT_OPTION,null, niveles, niveles[0]);
 			if(nivelSelected==null) {
 				this.setVisible(true);
 				cambiara(Inicio);
@@ -759,23 +774,23 @@ public class Ejecutable extends JFrame {
 			else {
 				while(nivelSelected!=null){
 					pregunta++;
-					if(nivelSelected.equalsIgnoreCase("Facil")) {
+					if(nivelSelected.equalsIgnoreCase("Fácil")) {
 						npregunta = 0+(int)(Math.random() * 999);
 						naleatorip = 0+(int)(Math.random() * 2);
 						option = opcionesJuegoEnt(naleatorip, npregunta);
-						seleccion = JOptionPane.showOptionDialog(null, ""+rs.getPreguntas().get(npregunta), "Nivel Facil Pregunta "+(pregunta+1), JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, option, option[0]);
+						seleccion = JOptionPane.showOptionDialog(null, ""+rs.getPreguntas().get(npregunta), "Nivel fácil pregunta "+(pregunta+1), JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, option, option[0]);
 						if(seleccion == 3) {
 							temp.setVisible(false);
 							pregunta--;
 						}else if(seleccion==naleatorip) {
 							try {
 								if (indicadorSound) {
-									mtc.Success();
+									mus.Success();
 								}
 								temp.setVisible(false);
 								JOptionPane.showMessageDialog(null,"Correcto");
 							} catch (LineUnavailableException | IOException | UnsupportedAudioFileException e) {
-								JOptionPane.showMessageDialog(null, "Musica no encontrada");
+								JOptionPane.showMessageDialog(null, "Música no encontrada");
 							}
 						}
 						else{
@@ -787,32 +802,32 @@ public class Ejecutable extends JFrame {
 							}
 							try {
 								if (indicadorSound) {
-									mtc.Fail();
+									mus.Fail();
 								}
 								temp.setVisible(false);
 								JOptionPane.showMessageDialog(null,"Incorrecto, la respuesta correcta es: "+rs.getRespuestaBuena().get(npregunta).toString());
 								
 							} catch (LineUnavailableException | IOException | UnsupportedAudioFileException e) {
-								JOptionPane.showMessageDialog(null, "Musica no encontrada");
+								JOptionPane.showMessageDialog(null, "Música no encontrada");
 							}						
 						}
 					}else if(nivelSelected.equalsIgnoreCase("Medio")) {
 						npregunta = 1000 + (int)(Math.random() * 999);
 						naleatorip = 0+(int)(Math.random() * 2);
 						option = opcionesJuegoEnt(naleatorip, npregunta);
-						seleccion = JOptionPane.showOptionDialog(null, ""+rs.getPreguntas().get(npregunta), "Nivel Medio Pregunta "+(pregunta+1), JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, option, option[0]);
+						seleccion = JOptionPane.showOptionDialog(null, ""+rs.getPreguntas().get(npregunta), "Nivel medio pregunta "+(pregunta+1), JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, option, option[0]);
 						if(seleccion == 3) {
 							temp.setVisible(false);
 							pregunta--;
 						}else if(seleccion==naleatorip) {
 							try {
 								if (indicadorSound) {
-									mtc.Success();
+									mus.Success();
 								}
 								temp.setVisible(false);
 								JOptionPane.showMessageDialog(null,"Correcto");
 							} catch (LineUnavailableException | IOException | UnsupportedAudioFileException e) {
-								JOptionPane.showMessageDialog(null, "Musica no encontrada");
+								JOptionPane.showMessageDialog(null, "Música no encontrada");
 							}
 						}
 						else{
@@ -823,31 +838,31 @@ public class Ejecutable extends JFrame {
 							}
 							try {
 								if (indicadorSound) {
-									mtc.Fail();
+									mus.Fail();
 								}
 								temp.setVisible(false);
 								JOptionPane.showMessageDialog(null,"Incorrecto, la respuesta correcta es: "+rs.getRespuestaBuena().get(npregunta).toString());
 							} catch (LineUnavailableException | IOException | UnsupportedAudioFileException e) {
-								JOptionPane.showMessageDialog(null, "Musica no encontrada");
+								JOptionPane.showMessageDialog(null, "Música no encontrada");
 							}						
 						}
 					}else {
 						npregunta = 2000 + (int)(Math.random() * 1000);
 						naleatorip = 0+(int)(Math.random() * 2);
 						option = opcionesJuegoEnt(naleatorip, npregunta);
-						seleccion = JOptionPane.showOptionDialog(null, ""+rs.getPreguntas().get(npregunta), "Nivel Dificil Pregunta "+(pregunta+1), JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, option, option[0]);
+						seleccion = JOptionPane.showOptionDialog(null, ""+rs.getPreguntas().get(npregunta), "Nivel difícil pregunta "+(pregunta+1), JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, option, option[0]);
 						if(seleccion == 3) {
 							temp.setVisible(false);
 							pregunta--;
 						}else if(seleccion==naleatorip) {
 							try {
 								if (indicadorSound) {
-									mtc.Success();
+									mus.Success();
 								}
 								temp.setVisible(false);
 								JOptionPane.showMessageDialog(null,"Correcto");
 							} catch (LineUnavailableException | IOException | UnsupportedAudioFileException e) {
-								JOptionPane.showMessageDialog(null, "Musica no encontrada");
+								JOptionPane.showMessageDialog(null, "Música no encontrada");
 							}
 						}
 						else{
@@ -858,12 +873,12 @@ public class Ejecutable extends JFrame {
 							}
 							try {
 								if (indicadorSound) {
-									mtc.Fail();
+									mus.Fail();
 								}
 								temp.setVisible(false);
 								JOptionPane.showMessageDialog(null,"Incorrecto, la respuesta correcta es: "+rs.getRespuestaBuena().get(npregunta).toString());
 							} catch (LineUnavailableException | IOException | UnsupportedAudioFileException e) {
-								JOptionPane.showMessageDialog(null, "Musica no encontrada");
+								JOptionPane.showMessageDialog(null, "Música no encontrada");
 							}						
 						}
 					}
@@ -884,6 +899,7 @@ public class Ejecutable extends JFrame {
 	private void formulaDePuntuacion(int pf) {
 		puntuacionNueva = pf;
 		lblpuntuacion.setText(""+puntuacionNueva);
+		list.ordenar();
 		lblPuntuacionM.setText(""+list.getLista().get(0).getPuntuacion());
 	}
 	
@@ -907,7 +923,7 @@ public class Ejecutable extends JFrame {
 	
 	public static void timeout() {
 		tiempo=true;
-		JOptionPane.showMessageDialog(null, "\tTiempo!!!!\nEsta pregunta no contara");
+		JOptionPane.showMessageDialog(null, "\t¡Tiempo!\nEsta pregunta no contará");
 	}
 	/**
 	 * Metodo que devuelve las respuestas a la pregunta del juego modo Entrenamiento
@@ -937,7 +953,7 @@ public class Ejecutable extends JFrame {
 		try {
 			bdo.guardarListaJugadores(list);
 		} catch (IOException e) {
-			JOptionPane.showMessageDialog(null, "Error al guardar los datos, lista no encontrada", "Error!", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, "Error al guardar los datos, lista no encontrada", "¡Error!", JOptionPane.ERROR_MESSAGE);
 		}
 	}
 	/**
@@ -949,24 +965,24 @@ public class Ejecutable extends JFrame {
 		int desplazaminetofacil = (puntuacionNueva*42);
 		int desplazaminetoMedio = (puntuacionNueva*23);
 		int desplazaminetoDificil = (puntuacionNueva*3);
-		lblFlecha.setBounds(-17, 302, 56, 137);
-		lblTu.setBounds(-17, 239, 56, 64);
-		lblCorona.setBounds(61, 245, 43, 43);
+		lblFlecha.setBounds(-17, 317, 56, 137);
+		lblTu.setBounds(-17, 260, 56, 64);
+		lblCorona.setBounds(-4, 245, 43, 40);
 		lblFlecha.setVisible(true);
 		lblTu.setVisible(true);
 
 		if(puntuacionNueva<= CFACIL) {
-			lblFlecha.setBounds((-17+desplazaminetofacil), 302, 56, 137);
-			lblTu.setBounds((-17+desplazaminetofacil), 239, 56, 64);
-			lblCorona.setBounds((71+desplazaminetofacil), 245, 43, 43);
+			lblFlecha.setBounds((-17+desplazaminetofacil), 317, 56, 125);
+			lblTu.setBounds((-17+desplazaminetofacil), 273, 56, 64);
+			lblCorona.setBounds((-4+desplazaminetofacil), 250, 43, 40);
 		}else if(puntuacionNueva<=CMEDIO){
-			lblFlecha.setBounds((142+desplazaminetoMedio), 302, 56, 137);
-			lblTu.setBounds((142+desplazaminetoMedio), 239, 56, 64);
-			lblCorona.setBounds((186+desplazaminetoMedio), 245, 43, 43);
+			lblFlecha.setBounds((142+desplazaminetoMedio), 317, 56, 125);
+			lblTu.setBounds((142+desplazaminetoMedio), 273, 56, 64);
+			lblCorona.setBounds((151+desplazaminetoMedio), 250, 43, 40);
 		}else{
-			lblFlecha.setBounds((372+desplazaminetoDificil), 302, 56, 137);
-			lblTu.setBounds((372+desplazaminetoDificil), 239, 56, 64);
-			lblCorona.setBounds((416+desplazaminetoDificil), 245, 43, 43);
+			lblFlecha.setBounds((372+desplazaminetoDificil), 317, 56, 125);
+			lblTu.setBounds((372+desplazaminetoDificil), 273, 56, 64);
+			lblCorona.setBounds((381+desplazaminetoDificil),  250, 43, 40);
 		}
 		
 		lblFlecha.setVisible(true);
