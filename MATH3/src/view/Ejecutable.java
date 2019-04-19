@@ -87,7 +87,7 @@ public class Ejecutable extends JFrame {
 	protected static boolean tiempo = false;
 	private JLabel lblTu;
 	private JLabel lblCorona;
-	private JTextField txtClasificacin;
+	private JButton txtClasificacin;
 	
 	
 	/**
@@ -123,7 +123,7 @@ public class Ejecutable extends JFrame {
 					} catch (ClassNotFoundException e) {
 						System.exit(0);
 					} catch (IOException e) {
-						int opcion = JOptionPane.showConfirmDialog(null, "Lista no encotrada, ¿Desea crear una nueva?","¡Error!", JOptionPane.YES_NO_OPTION);
+						int opcion = JOptionPane.showConfirmDialog(null, "Lista no encontrada, ¿Desea crear una nueva?","¡Error!", JOptionPane.YES_NO_OPTION);
 						if(opcion==0) {
 							try {
 								bdo.crearListaJugadores();
@@ -209,14 +209,13 @@ public class Ejecutable extends JFrame {
 
 		scrollPane.setViewportView(table);
 		
-		txtClasificacin = new JTextField();
+		txtClasificacin = new JButton();
 		txtClasificacin.setBackground(SystemColor.controlHighlight);
 		txtClasificacin.setHorizontalAlignment(SwingConstants.CENTER);
 		txtClasificacin.setFont(new Font("Dubai Medium", Font.PLAIN, 60));
 		txtClasificacin.setText("Clasificaci\u00F3n");
 		txtClasificacin.setBounds(82, 0, 507, 70);
 		Ranking.add(txtClasificacin);
-		txtClasificacin.setColumns(10);
 		btnVolverking.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				cambiara(Inicio);
