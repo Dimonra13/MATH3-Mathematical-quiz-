@@ -330,9 +330,11 @@ public class Ejecutable extends JFrame {
 		});
 		Inicio.add(btnSalir);
 		
+		ImageIcon tuto = new ImageIcon(Ejecutable.class.getResource("/Resource/iconAyuda.png"));
+		Icon iconoTuto= new ImageIcon(tuto.getImage().getScaledInstance(50,50,Image.SCALE_DEFAULT));
 		btnTutorial = new JButton("");
 		btnTutorial.setBounds(519, 526, 70, 70);
-		btnTutorial.setIcon(iconoescape);
+		btnTutorial.setIcon(iconoTuto);
 		btnTutorial.repaint();
 		btnTutorial.setBorder(null);
 		btnTutorial.addActionListener(new ActionListener() {
