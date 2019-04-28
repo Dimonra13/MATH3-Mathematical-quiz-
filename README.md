@@ -1,5 +1,5 @@
 # Math3 
-Version 1.0   3/05/2019
+Version 2.2   3/05/2019
 ___
 
 Math3 es un juego de matemáticas para evaluar tu nivel mediante diferentes pruebas aritméticas.
