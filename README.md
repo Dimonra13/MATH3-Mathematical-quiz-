@@ -20,7 +20,7 @@ PARTIDA CLÁSICA and ENTRENAMIENTO game modes consist in a quiz game system wher
 ___
 <img src="https://github.com/Dimonra13/MATH3-Mathematical-quiz-/blob/master/MATH3/src/Resource/StartSample.PNG" align="center">  
 
-![Question](https://github.com/Dimonra13/MATH3-Mathematical-quiz-/blob/master/MATH3/src/Resource/QuestionSample.png | align=middle)
+<img src="https://github.com/Dimonra13/MATH3-Mathematical-quiz-/blob/master/MATH3/src/Resource/QuestionSample.png" align="center">  
 ___
 
 **Creadores / Creators:**
