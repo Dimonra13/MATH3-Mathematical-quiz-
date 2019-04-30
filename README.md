@@ -18,9 +18,9 @@ Once started the application, user must introduce their name before playing. Mat
 PARTIDA CLÁSICA and ENTRENAMIENTO game modes consist in a quiz game system where user must choose one of the three possible answers to every question. PARTIDA CLÁSICA mode consist of 20 questions, and user must answer all of them so they can record their score. Difficulty of these questions will increase or decrease according to user's responses. In ENTRENAMIENTO mode user will chose the difficulty in every question, and they may stop whenever they want to.
 
 ___
-![Start](https://github.com/Dimonra13/MATH3-Mathematical-quiz-/blob/master/MATH3/src/Resource/StartSample.PNG)  
+![Start](https://github.com/Dimonra13/MATH3-Mathematical-quiz-/blob/master/MATH3/src/Resource/StartSample.PNG | align=middle)  
 
-![Question](https://github.com/Dimonra13/MATH3-Mathematical-quiz-/blob/master/MATH3/src/Resource/QuestionSample.png)
+![Question](https://github.com/Dimonra13/MATH3-Mathematical-quiz-/blob/master/MATH3/src/Resource/QuestionSample.png | align=middle)
 ___
 
 **Creadores / Creators:**
